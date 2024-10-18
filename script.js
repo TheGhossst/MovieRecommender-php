@@ -7,33 +7,49 @@ document.addEventListener('DOMContentLoaded', function() {
     
     let selectedTags = [];
     let availableTags = [];
+    let allMovies = [];
 
-    // Fetch available tags from the server
-    fetch('get_tags.php')
+    // Fetch available tags from tags.json
+    fetch('data/tags.json')
         .then(response => response.json())
-        .then(tags => {
-            availableTags = tags;
-            tags.forEach(tag => {
-                const tagElement = document.createElement('span');
-                tagElement.className = 'available-tag';
-                tagElement.textContent = tag.name;
-                
-                tagElement.addEventListener('click', function() {
-                    const tagName = tag.name.toLowerCase();
-                    if (!selectedTags.includes(tagName)) {
-                        selectedTags.push(tagName);
-                        renderTags();
-                        fetchMovies();
-                    }
-                });
-                
-                availableTagsContainer.appendChild(tagElement);
-            });
+        .then(data => {
+            availableTags = data.tags;
+            renderAvailableTags();
         })
         .catch(error => {
             console.error('Error fetching tags:', error);
             availableTagsContainer.innerHTML = 'Error loading tags';
         });
+
+    // Fetch movies from movies.json
+    fetch('data/movies.json')
+        .then(response => response.json())
+        .then(data => {
+            allMovies = data.movies;
+        })
+        .catch(error => {
+            console.error('Error fetching movies:', error);
+            movieContainer.innerHTML = 'Error loading movies';
+        });
+
+    function renderAvailableTags() {
+        availableTags.forEach(tag => {
+            const tagElement = document.createElement('span');
+            tagElement.className = 'available-tag';
+            tagElement.textContent = tag.name;
+            
+            tagElement.addEventListener('click', function() {
+                const tagName = tag.name.toLowerCase();
+                if (!selectedTags.includes(tagName)) {
+                    selectedTags.push(tagName);
+                    renderTags();
+                    filterMovies();
+                }
+            });
+            
+            availableTagsContainer.appendChild(tagElement);
+        });
+    }
 
     addTagBtn.addEventListener('click', addTag);
     tagInput.addEventListener('keypress', (e) => {
@@ -48,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
             selectedTags.push(tag);
             renderTags();
             tagInput.value = '';
-            fetchMovies();
+            filterMovies();
         } else if (!tagExists) {
             alert('This tag is not available. Please select from the available tags.');
         }
@@ -72,27 +88,16 @@ document.addEventListener('DOMContentLoaded', function() {
     function removeTag(tag) {
         selectedTags = selectedTags.filter(t => t !== tag);
         renderTags();
-        fetchMovies();
+        filterMovies();
     }
 
-    function fetchMovies() {
+    function filterMovies() {
         if (selectedTags.length > 0) {
-            fetch('get_movies.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: `tags=${encodeURIComponent(JSON.stringify(selectedTags))}`
-            })
-            .then(response => response.json())
-            .then(movies => {
-                console.log('Received movies:', movies); // Debug log
-                renderMovies(movies);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                movieContainer.innerHTML = '<div class="error">Error loading movies</div>';
+            const filteredMovies = allMovies.filter(movie => {
+                const movieTags = movie.tags.map(tag => tag.toLowerCase());
+                return selectedTags.every(tag => movieTags.includes(tag));
             });
+            renderMovies(filteredMovies);
         } else {
             movieContainer.innerHTML = '';
         }
