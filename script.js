@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const movieTags = tags.map(tag => `<span class="movie-tag">${tag}</span>`).join('');
     
             movieCard.innerHTML = `
-                <img src="${movie.image}" onerror="this.src='https://via.placeholder.com/250x200.png?text=${encodeURIComponent(movie.title)}'">
+                <img src="${movie.image}" >
                 <div class="movie-info">
                     <h3 class="movie-title">${movie.title}</h3>
                     <p class="movie-year">${movie.year}</p>
