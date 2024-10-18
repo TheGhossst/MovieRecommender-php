@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 tagElement.className = 'available-tag';
                 tagElement.textContent = tag.name;
                 
-                // Add click functionality to toggle tag selection
                 tagElement.addEventListener('click', function() {
                     const tagName = tag.name.toLowerCase();
                     if (!selectedTags.includes(tagName)) {
@@ -43,7 +42,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function addTag() {
         const tag = tagInput.value.trim().toLowerCase();
-        // Check if tag exists in available tags
         const tagExists = availableTags.some(t => t.name.toLowerCase() === tag);
         
         if (tag && !selectedTags.includes(tag) && tagExists) {
@@ -52,7 +50,6 @@ document.addEventListener('DOMContentLoaded', function() {
             tagInput.value = '';
             fetchMovies();
         } else if (!tagExists) {
-            // Show error message if tag doesn't exist
             alert('This tag is not available. Please select from the available tags.');
         }
     }
@@ -88,8 +85,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 body: `tags=${encodeURIComponent(JSON.stringify(selectedTags))}`
             })
             .then(response => response.json())
-            .then(movies => renderMovies(movies))
-            .catch(error => console.error('Error:', error));
+            .then(movies => {
+                console.log('Received movies:', movies); // Debug log
+                renderMovies(movies);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                movieContainer.innerHTML = '<div class="error">Error loading movies</div>';
+            });
         } else {
             movieContainer.innerHTML = '';
         }
@@ -97,16 +100,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function renderMovies(movies) {
         movieContainer.innerHTML = '';
+        if (!Array.isArray(movies)) {
+            console.error('Expected movies to be an array, got:', movies);
+            return;
+        }
+
         movies.forEach(movie => {
+            console.log('Processing movie:', movie); // Debug log
             const movieCard = document.createElement('div');
             movieCard.classList.add('movie-card');
             
-            const movieTags = movie.tags.split(',')
-                .map(tag => `<span class="movie-tag">${tag.trim()}</span>`)
-                .join('');
+            // Ensure movie.tags is an array, if not, make it an empty array
+            const tags = Array.isArray(movie.tags) ? movie.tags : [];
+            const movieTags = tags.map(tag => `<span class="movie-tag">${tag}</span>`).join('');
     
             movieCard.innerHTML = `
-                <img src="${movie.image}" onerror="this.onerror=null; this.src='https://via.placeholder.com/250x200.png?text=${encodeURIComponent(movie.title)}">
+                <img src="${movie.image}" onerror="this.src='https://via.placeholder.com/250x200.png?text=${encodeURIComponent(movie.title)}'">
                 <div class="movie-info">
                     <h3 class="movie-title">${movie.title}</h3>
                     <p class="movie-year">${movie.year}</p>

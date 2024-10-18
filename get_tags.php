@@ -1,27 +1,13 @@
 <?php
 header('Content-Type: application/json');
 
-$host = 'localhost';
-$dbname = 'movie';
-$user = 'root';
-$pass = '';
-
-$dsn = "mysql:host=$host;dbname=$dbname;charset=utf8mb4";
-$options = [
-    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-];
-
-try {
-    $pdo = new PDO($dsn, $user, $pass, $options);
-} catch (PDOException $e) {
-    die(json_encode(['error' => $e->getMessage()]));
+// Read tags from JSON file
+function getTags() {
+    $jsonContent = file_get_contents('data/tags.json');
+    $data = json_decode($jsonContent, true);
+    return $data['tags'];
 }
 
-$sql = "SELECT * FROM tags ORDER BY name";
-$stmt = $pdo->prepare($sql);
-$stmt->execute();
-$tags = $stmt->fetchAll();
-
+$tags = getTags();
 echo json_encode($tags);
 ?>

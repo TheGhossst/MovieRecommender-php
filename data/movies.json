@@ -1,0 +1,84 @@
+{
+    "movies": [
+      {
+        "id": 1,
+        "title": "Anora",
+        "year": 2024,
+        "rating": 4.8,
+        "image": "https://via.placeholder.com/250x200.png?text=Anora",
+        "tags": ["adventure", "drama", "romance"]
+      },
+      {
+        "id": 2,
+        "title": "The Penguin",
+        "year": 2024,
+        "rating": 4.3,
+        "image": "https://via.placeholder.com/250x200.png?text=The+Penguin",
+        "tags": ["comedy", "drama"]
+      },
+      {
+        "id": 3,
+        "title": "Wild Adventures",
+        "year": 2022,
+        "rating": 4.6,
+        "image": "https://via.placeholder.com/250x200.png?text=Wild+Adventures",
+        "tags": ["adventure", "fantasy"]
+      },
+      {
+        "id": 4,
+        "title": "Mystery Island",
+        "year": 2020,
+        "rating": 4.4,
+        "image": "https://via.placeholder.com/250x200.png?text=Mystery+Island",
+        "tags": ["adventure", "thriller"]
+      },
+      {
+        "id": 5,
+        "title": "Galactic Heroes",
+        "year": 2023,
+        "rating": 4.7,
+        "image": "https://via.placeholder.com/250x200.png?text=Galactic+Heroes",
+        "tags": ["adventure", "sci-fi"]
+      },
+      {
+        "id": 6,
+        "title": "Love & Laughter",
+        "year": 2022,
+        "rating": 4.2,
+        "image": "https://via.placeholder.com/250x200.png?text=Love+%26+Laughter",
+        "tags": ["comedy", "romance"]
+      },
+      {
+        "id": 7,
+        "title": "The Last Warrior",
+        "year": 2021,
+        "rating": 4.5,
+        "image": "https://via.placeholder.com/250x200.png?text=The+Last+Warrior",
+        "tags": ["action", "adventure"]
+      },
+      {
+        "id": 8,
+        "title": "Fright Night",
+        "year": 2021,
+        "rating": 4.1,
+        "image": "https://via.placeholder.com/250x200.png?text=Fright+Night",
+        "tags": ["thriller", "horror"]
+      },
+      {
+        "id": 9,
+        "title": "Ocean's Wonders",
+        "year": 2020,
+        "rating": 4.3,
+        "image": "https://via.placeholder.com/250x200.png?text=Ocean's+Wonders",
+        "tags": ["adventure", "fantasy"]
+      },
+      {
+        "id": 10,
+        "title": "Epic Journey",
+        "year": 2023,
+        "rating": 4.9,
+        "image": "https://via.placeholder.com/250x200.png?text=Epic+Journey",
+        "tags": ["adventure", "drama"]
+      }
+    ]
+  }
