@@ -1,35 +1,27 @@
 <?php
-// get_tags.php
+header('Content-Type: application/json');
 
-// Database connection (replace with your actual credentials)
 $host = 'localhost';
 $dbname = 'movie';
 $user = 'root';
 $pass = '';
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+$dsn = "mysql:host=$host;dbname=$dbname;charset=utf8mb4";
+$options = [
+    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+];
 
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+try {
+    $pdo = new PDO($dsn, $user, $pass, $options);
+} catch (PDOException $e) {
+    die(json_encode(['error' => $e->getMessage()]));
 }
 
-// Query to fetch tags
-$sql = "SELECT * FROM tags";
-$result = $conn->query($sql);
+$sql = "SELECT * FROM tags ORDER BY name";
+$stmt = $pdo->prepare($sql);
+$stmt->execute();
+$tags = $stmt->fetchAll();
 
-// Create an array to hold the tags
-$tags = [];
-
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $tags[] = $row['name'];  // Fetch only the 'name' column
-    }
-}
-
-// Return tags as JSON
 echo json_encode($tags);
-
-// Close the connection
-$conn->close();
 ?>
